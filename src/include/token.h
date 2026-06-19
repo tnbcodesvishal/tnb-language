@@ -8,7 +8,8 @@ typedef enum {
     TOKEN_STRING,
     TOKEN_SEMI,       // ;
     TOKEN_LPAREN,     // (  
-    TOKEN_RPAREN,     // )
+    TOKEN_RPAREN,
+    TOKEN_COMMA,      // ,
     TOKEN_EOF
 } type;
 
