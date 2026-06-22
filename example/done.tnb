@@ -1,0 +1,7 @@
+@@ 
+
+data types ->>int,float, string, char
+
+operator ->> plus, minus
+
+user define function ->> print

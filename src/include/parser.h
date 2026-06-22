@@ -28,8 +28,14 @@ AST_T* parser_parse_variable_defination(parser_T* parser);
 AST_T* parser_parse_variable(parser_T* parser);
 AST_T* parser_parse_string(parser_T* parser);
 
+AST_T* parser_parse_int(parser_T* parser);
+AST_T* parser_parse_float(parser_T* parser);
+
+AST_T* parser_parse_char(parser_T* parser);
 
 AST_T* parser_parse_id(parser_T* parser);
+
+
  
 
 

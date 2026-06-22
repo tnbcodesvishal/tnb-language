@@ -24,5 +24,13 @@ token_T *lexer_advance_with_token(lexer_T *lexer, token_T *token);
 
 char* lexer_get_current_char_as_string(lexer_T *lexer);
 
+token_T *lexer_collect_char(lexer_T *lexer);
+
+token_T *lexer_collect_number(lexer_T *lexer);
+
+void lexer_skip_comment(lexer_T* lexer);    
+
+void lexer_skip_multiline_comment(lexer_T* lexer);
+
 
 #endif

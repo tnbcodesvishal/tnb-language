@@ -1,4 +1,23 @@
-printjj("sjdljas");
+@ this is single line comment 
+
+@@ this is 
+multiple lines
+comments@@
+
+var name="vishal singh";
+var age="22";
+var a=10;
+var b=5;
+var c=a+b;
+var decvalue="22.1";
+var charvalue='A';
+
+print(a+b, c, name , age, decvalue,  charvalue);
+
+
+
+
+
 
 
 

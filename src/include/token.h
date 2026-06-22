@@ -10,6 +10,12 @@ typedef enum {
     TOKEN_LPAREN,     // (  
     TOKEN_RPAREN,
     TOKEN_COMMA,      // ,
+    TOKEN_INT,      // for integer values
+    TOKEN_FLOAT,    // for float values
+    TOKEN_CHAR,    // for character values
+
+    TOKEN_PLUS,      // +
+    TOKEN_MINUS,     // -
     TOKEN_EOF
 } type;
 

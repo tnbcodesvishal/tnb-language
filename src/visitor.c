@@ -2,25 +2,10 @@
 
 #include <stdio.h>
 #include <string.h>
-static AST_T* builtin_function_print(visitor_T* visitor, AST_T** args, int args_size){
+#include "operators/operators.h"
 
-    for(int i=0;i<args_size;i++){
-        AST_T* visited_ast=visitor_visit(visitor, args[i]);
+#include "builtins/builtins.h"
 
-        switch (visited_ast->type)
-        {
-        case AST_STRING:
-            printf("%s\n", visited_ast->string_value);
-            
-            break;
-
-            default:
-            printf("%p\n", visited_ast);
-            break;
-        }  
-    }
-    return init_ast(AST_NOOP);
-}
 
 visitor_T* init_visitor(){
     visitor_T* visitor = calloc(1, sizeof(struct VISITOR_STRUCT));
@@ -56,6 +41,22 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node){
                 return visitor_visit_compound(visitor, node);
                 break;
 
+            case AST_INT:
+                 return visitor_visit_int(visitor, node);
+                 break;
+
+            case AST_FLOAT:
+                 return visitor_visit_float(visitor, node);
+                 break;
+
+            case AST_CHAR:
+             return visitor_visit_char(visitor,node);
+             break;
+
+             case AST_BINOP:
+        return visitor_visit_binop(visitor, node);
+        break;
+
             case AST_NOOP:
                 return node;
                 break;
@@ -70,23 +71,76 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node){
 
 }
 
-AST_T* visitor_visit_variable_defination( visitor_T* visitor, AST_T* node){
+// AST_T* visitor_visit_variable_defination( visitor_T* visitor, AST_T* node){
 
   
-    if(visitor->variables_definations==(void *)0){
-        visitor->variables_definations=calloc(1, sizeof(struct AST_STRUCT*));
-        visitor->variables_definations[0]=node;
-        visitor->variables_definations_size +=1;
-    }
-    else{
-          visitor->variables_definations_size += 1;
-        visitor->variables_definations=realloc(visitor->variables_definations, (visitor->variables_definations_size+1)*sizeof(struct AST_STRUCT*));
+//     if(visitor->variables_definations==(void *)0){
+//         visitor->variables_definations=calloc(1, sizeof(struct AST_STRUCT*));
+//         visitor->variables_definations[0]=node;
+//         visitor->variables_definations_size +=1;
+//     }
+//     else{
+//           visitor->variables_definations_size += 1;
+//         visitor->variables_definations=realloc(visitor->variables_definations, (visitor->variables_definations_size+1)*sizeof(struct AST_STRUCT*));
 
-        visitor->variables_definations[visitor->variables_definations_size-1]=node;
+//         visitor->variables_definations[visitor->variables_definations_size-1]=node;
+//     }
+
+//     return node;
+
+// }
+
+
+AST_T* visitor_visit_variable_defination(visitor_T* visitor,
+                                         AST_T* node)
+{
+    for(int i = 0;
+        i < visitor->variables_definations_size;
+        i++)
+    {
+        AST_T* vardef =
+            visitor->variables_definations[i];
+
+        if(strcmp(
+                vardef->variable_defination_variable_name,
+                node->variable_defination_variable_name
+           ) == 0)
+        {
+            printf(
+                "Error: Variable '%s' already declared\n",
+                node->variable_defination_variable_name
+            );
+
+            exit(1);
+        }
+    }
+
+    if(visitor->variables_definations == (void*)0)
+    {
+        visitor->variables_definations =
+            calloc(1, sizeof(struct AST_STRUCT*));
+
+        visitor->variables_definations[0] = node;
+
+        visitor->variables_definations_size = 1;
+    }
+    else
+    {
+        visitor->variables_definations_size++;
+
+        visitor->variables_definations =
+            realloc(
+                visitor->variables_definations,
+                visitor->variables_definations_size *
+                sizeof(struct AST_STRUCT*)
+            );
+
+        visitor->variables_definations[
+            visitor->variables_definations_size - 1
+        ] = node;
     }
 
     return node;
-
 }
 
 AST_T* visitor_visit_variable(visitor_T* visitor, AST_T* node){
@@ -120,6 +174,21 @@ AST_T* visitor_visit_string(visitor_T* visitor, AST_T* node){
 
 }
 
+AST_T* visitor_visit_int(visitor_T* visitor, AST_T* node)
+{
+    return node;
+}
+
+
+AST_T* visitor_visit_float(visitor_T* visitor, AST_T* node)
+{
+    return node;
+}
+
+AST_T* visitor_visit_char(visitor_T* visitor,AST_T* node)
+{
+    return node;
+}
 AST_T* visitor_visit_compound(visitor_T* visitor, AST_T* node){
 
     for(int i=0; i<node->compound_size; i++){
@@ -130,4 +199,38 @@ AST_T* visitor_visit_compound(visitor_T* visitor, AST_T* node){
 
     return init_ast(AST_NOOP);
     
+}
+
+AST_T* visitor_visit_binop(
+visitor_T* visitor,
+AST_T* node
+)
+{
+AST_T* left =
+visitor_visit(visitor, node->left);
+
+AST_T* right =
+    visitor_visit(visitor, node->right);
+
+if(strcmp(node->op, "+") == 0)
+{
+    return operator_plus(
+        visitor,
+        left,
+        right
+    );
+}
+
+if(strcmp(node->op, "-") == 0)
+{
+    return operator_minus(
+        visitor,
+        left,
+        right
+    );
+}
+
+printf("Unknown operator: %s\n", node->op);
+exit(1);
+
 }
