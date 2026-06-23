@@ -80,13 +80,16 @@ AST_T* parser_parse_expr(parser_T* parser)
 
     while(
         parser->current_token->type == TOKEN_PLUS ||
-        parser->current_token->type == TOKEN_MINUS
+        parser->current_token->type == TOKEN_MINUS ||
+            parser->current_token->type == TOKEN_MUL
     )
     {
         char* op = parser->current_token->value;
 
         if(parser->current_token->type == TOKEN_PLUS)
             parser_eat(parser, TOKEN_PLUS);
+        else if(parser->current_token->type == TOKEN_MUL)
+            parser_eat(parser, TOKEN_MUL);
         else
             parser_eat(parser, TOKEN_MINUS);
 

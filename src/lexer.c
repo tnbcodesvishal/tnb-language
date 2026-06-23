@@ -262,8 +262,14 @@ token_T *lexer_get_next_token(lexer_T *lexer)
         )
     );
 
-
-                
+    case '*':
+    return lexer_advance_with_token(
+        lexer,
+        init_token(
+            TOKEN_MUL,
+            lexer_get_current_char_as_string(lexer)
+        )
+    );
         }
 
         printf("Lexer Error: Unknown character '%c' (%d)\n",

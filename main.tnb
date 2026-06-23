@@ -9,10 +9,11 @@ var age="22";
 var a=10;
 var b=5;
 var c=a+b;
-var decvalue="22.1";
+var decvalue=22.1;
 var charvalue='A';
 
-print(a+b, c, name , age, decvalue,  charvalue , a*b);
+
+print(10*2);
 
 
 

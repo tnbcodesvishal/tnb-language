@@ -16,4 +16,11 @@ AST_T* operator_minus(
     AST_T* right
 );
 
+
+AST_T* operator_multiply(
+    visitor_T* visitor,
+    AST_T* left,
+    AST_T* right
+);
+
 #endif
