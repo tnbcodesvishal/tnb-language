@@ -1,6 +1,4 @@
-    #include "operators.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "operators.h"
 
 AST_T* operator_minus(
     visitor_T* visitor,
@@ -8,20 +6,14 @@ AST_T* operator_minus(
     AST_T* right
 )
 {
-    if(
-        left->type == AST_INT &&
-        right->type == AST_INT
-    )
-    {
-        AST_T* result = init_ast(AST_INT);
+    double a =
+        operator_get_number(left);
 
-        result->int_value =
-            left->int_value -
-            right->int_value;
+    double b =
+        operator_get_number(right);
 
-        return result;
-    }
-
-    printf("Unsupported - operation\n");
-    exit(1);
+    return operator_create_number(
+        a-b,
+        operator_result_is_float(left,right)
+    );
 }

@@ -1,3 +1,4 @@
+@check precedence 
 print(10+5*2);     
 print(20+5/2);      
 print(20-5-2);     
@@ -5,3 +6,20 @@ print(2*3+4*5);
 print(100/10+5);    
 print((10+5)*2);
 
+@check extra ()
+print((10+5)*2);        
+print(10+(5*2));       
+print((2+3)*(4+5));    
+print((20/5)+2);       
+print((10-3)*2);  
+
+@check arithmetic operators for int and float
+print(5+2);
+print(5.5+2.5);
+print(5+2.5);
+print(5.5+2);
+
+print(10*2.5);
+print(20/4.0);
+print(7.5-2);
+print(3.0/2);

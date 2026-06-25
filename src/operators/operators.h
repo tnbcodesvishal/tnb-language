@@ -3,6 +3,7 @@
 
 #include "../include/AST.h"
 #include "../include/visitor.h"
+#include "operator_utils.h"
 
 AST_T* operator_plus(
     visitor_T* visitor,

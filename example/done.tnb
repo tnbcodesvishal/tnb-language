@@ -6,7 +6,36 @@ operator ->> plus, minus, multiply,divide only for integer value
 
 user define function ->> print
 
-precedence for integer value @@
+precedence for integer value 
+
+
+arithmetic operation rules for tnb language
+
+int + int     -> int
+int - int     -> int
+int * int     -> int
+int / int     -> int
+
+float + float -> float
+float - float -> float
+float * float -> float
+float / float -> float
+
+int + float   -> float
+int - float   -> float
+int * float   -> float
+int / float   -> float
+
+float + int   -> float
+float - int   -> float
+float * int   -> float
+float / int   -> float
+
+
+
+
+
+@@
 
 
 
