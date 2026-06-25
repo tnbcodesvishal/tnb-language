@@ -2,7 +2,7 @@
 
 data types ->>int,float, string, char
 
-operator ->> plus, minus, multiply,divide only for integer value
+operator ->> plus, minus, multiply,divison,Unary + -
 
 user define function ->> print
 
