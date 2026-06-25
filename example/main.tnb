@@ -12,8 +12,15 @@ var c=a+b;
 var decvalue=22.1;
 var charvalue='A';
 
-print(a+b,a-b,a*b,a/b);
-print(10+2,10-3,10*2,10/2);
+@print(a+b,a-b,a*b,a/b);
+@print(10+2,10-3,10*2,10/2);
+
+print(10+5*2);     
+print(20+5/2);      
+print(20-5-2);     
+print(2*3+4*5);     
+print(100/10+5);    
+print((10+5)*2);
 
 
 
