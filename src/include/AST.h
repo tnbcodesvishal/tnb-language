@@ -17,6 +17,7 @@ typedef struct AST_STRUCT
         AST_FUNCTION_CALL,
         AST_STRING,
         AST_COMPOUND,
+        AST_UNARY,
         AST_BINOP,
         AST_NOOP,
     
@@ -43,7 +44,9 @@ char* op;
     int int_value;
     float float_value;
     char char_value;
+  char* unary_op;
 
+    struct AST_STRUCT* unary_value;
     struct AST_STRUCT** compound_value;
     size_t compound_size;
 

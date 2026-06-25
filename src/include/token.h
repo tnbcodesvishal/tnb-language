@@ -18,6 +18,7 @@ typedef enum {
     TOKEN_MINUS,     // -
    TOKEN_MUL,        // *
    TOKEN_DIV,
+   TOKEN_MOD,
     TOKEN_EOF
 } type;
 

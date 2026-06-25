@@ -106,6 +106,30 @@ AST_T* parser_parse_expr(parser_T* parser)
 
 AST_T* parser_parse_factor(parser_T* parser)
 {
+    if(parser->current_token->type == TOKEN_PLUS)
+    {
+        parser_eat(parser, TOKEN_PLUS);
+
+        AST_T* unary = init_ast(AST_UNARY);
+
+        unary->unary_op = "+";
+        unary->unary_value = parser_parse_factor(parser);
+
+        return unary;
+    }
+
+    if(parser->current_token->type == TOKEN_MINUS)
+    {
+        parser_eat(parser, TOKEN_MINUS);
+
+        AST_T* unary = init_ast(AST_UNARY);
+
+        unary->unary_op = "-";
+        unary->unary_value = parser_parse_factor(parser);
+
+        return unary;
+    }
+
     if(parser->current_token->type == TOKEN_LPAREN)
     {
         parser_eat(parser, TOKEN_LPAREN);
@@ -145,15 +169,18 @@ AST_T* parser_parse_factor(parser_T* parser)
 
     while(
         parser->current_token->type == TOKEN_MUL ||
-        parser->current_token->type == TOKEN_DIV
+        parser->current_token->type == TOKEN_DIV||
+        parser->current_token->type == TOKEN_MOD
     )
     {
         char* op = parser->current_token->value;
 
         if(parser->current_token->type == TOKEN_MUL)
             parser_eat(parser, TOKEN_MUL);
+        else if(parser->current_token->type == TOKEN_DIV)
+            parser_eat(parser,TOKEN_DIV);
         else
-            parser_eat(parser, TOKEN_DIV);
+            parser_eat(parser, TOKEN_MOD);
 
         AST_T* right = parser_parse_factor(parser);
 

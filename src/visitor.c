@@ -57,6 +57,10 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node){
         return visitor_visit_binop(visitor, node);
         break;
 
+        case AST_UNARY:
+        return visitor_visit_unary(visitor, node);
+        break;
+
             case AST_NOOP:
                 return node;
                 break;
@@ -71,24 +75,6 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node){
 
 }
 
-// AST_T* visitor_visit_variable_defination( visitor_T* visitor, AST_T* node){
-
-  
-//     if(visitor->variables_definations==(void *)0){
-//         visitor->variables_definations=calloc(1, sizeof(struct AST_STRUCT*));
-//         visitor->variables_definations[0]=node;
-//         visitor->variables_definations_size +=1;
-//     }
-//     else{
-//           visitor->variables_definations_size += 1;
-//         visitor->variables_definations=realloc(visitor->variables_definations, (visitor->variables_definations_size+1)*sizeof(struct AST_STRUCT*));
-
-//         visitor->variables_definations[visitor->variables_definations_size-1]=node;
-//     }
-
-//     return node;
-
-// }
 
 
 AST_T* visitor_visit_variable_defination(visitor_T* visitor,
@@ -247,7 +233,61 @@ if(strcmp(node->op, "/")==0){
     );
 }
 
+if(strcmp(node->op, "%") == 0)
+{
+    return operator_modulo(
+        visitor,
+        left,
+        right
+    );
+}
+
 printf("Unknown operator: %s\n", node->op);
 exit(1);
 
+}
+
+AST_T* visitor_visit_unary(
+    visitor_T* visitor,
+    AST_T* node
+)
+{
+    AST_T* value =
+        visitor_visit(
+            visitor,
+            node->unary_value
+        );
+
+    if(strcmp(node->unary_op,"+")==0)
+    {
+        return value;
+    }
+
+    if(strcmp(node->unary_op,"-")==0)
+    {
+        if(value->type == AST_INT)
+        {
+            AST_T* result =
+                init_ast(AST_INT);
+
+            result->int_value =
+                -value->int_value;
+
+            return result;
+        }
+
+        if(value->type == AST_FLOAT)
+        {
+            AST_T* result =
+                init_ast(AST_FLOAT);
+
+            result->float_value =
+                -value->float_value;
+
+            return result;
+        }
+    }
+
+    printf("Unknown unary operator\n");
+    exit(1);
 }

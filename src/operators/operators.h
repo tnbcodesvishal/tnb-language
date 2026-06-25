@@ -31,4 +31,10 @@ AST_T* operator_divide(
 
 );
 
+AST_T* operator_modulo(
+    visitor_T* visitor,
+    AST_T* left,
+    AST_T* right
+);
+
 #endif
