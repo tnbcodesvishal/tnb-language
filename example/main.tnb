@@ -5,14 +5,17 @@ multiple lines
 comments@@
 
 var name="vishal singh";
-var age="22";
+var age=22;
 var a=10;
 var b=5;
 var c=a+b;
-var decvalue="22.1";
+var decvalue=22.1;
 var charvalue='A';
 
-print(a+b, c, name , age, decvalue,  charvalue , a*b);
+print(a+b,a-b,a*b,a/b);
+print(10+2,10-3,10*2,10/2);
+
+
 
 
 

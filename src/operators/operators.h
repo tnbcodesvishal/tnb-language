@@ -23,4 +23,11 @@ AST_T* operator_multiply(
     AST_T* right
 );
 
+AST_T* operator_divide(
+    visitor_T* visitor,
+    AST_T* left,
+    AST_T* right
+
+);
+
 #endif

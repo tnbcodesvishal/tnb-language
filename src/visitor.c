@@ -239,6 +239,14 @@ if(strcmp(node->op, "*") == 0)
     );
 }
 
+if(strcmp(node->op, "/")==0){
+    return operator_divide(
+        visitor,
+        left,
+        right
+    );
+}
+
 printf("Unknown operator: %s\n", node->op);
 exit(1);
 
