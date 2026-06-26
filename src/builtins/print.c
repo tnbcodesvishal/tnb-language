@@ -34,6 +34,15 @@ AST_T* builtin_function_print(
                        visited_ast->char_value);
                 break;
 
+            case AST_BOOL:
+
+    if(visited_ast->bool_value)
+        printf("true\n");
+    else
+        printf("false\n");
+
+    break;
+
             default:
                 printf("%p\n",
                        visited_ast);

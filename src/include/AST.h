@@ -18,6 +18,7 @@ typedef struct AST_STRUCT
         AST_STRING,
         AST_COMPOUND,
         AST_UNARY,
+        AST_BOOL,
         AST_BINOP,
         AST_NOOP,
     
@@ -45,6 +46,7 @@ char* op;
     float float_value;
     char char_value;
   char* unary_op;
+  int bool_value;
 
     struct AST_STRUCT* unary_value;
     struct AST_STRUCT** compound_value;

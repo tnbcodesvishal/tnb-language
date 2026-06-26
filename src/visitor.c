@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "operators/operators.h"
+#include "comparisons/comparisons.h"
 
 #include "builtins/builtins.h"
 
@@ -59,6 +60,10 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node){
 
         case AST_UNARY:
         return visitor_visit_unary(visitor, node);
+        break;
+
+        case AST_BOOL:
+        return visitor_visit_bool(visitor, node);
         break;
 
             case AST_NOOP:
@@ -242,6 +247,43 @@ if(strcmp(node->op, "%") == 0)
     );
 }
 
+if(strcmp(node->op,"==")==0)
+{
+    return comparison_equal(
+        visitor,
+        left,
+        right
+    );
+}
+
+if(strcmp(node->op,"!=")==0){
+    return comparison_not_equal(
+        visitor,
+        left,
+        right
+    );
+}
+
+if(strcmp(node->op, ">") == 0)
+{
+    return comparison_greater(
+        visitor,
+        left,
+        right
+    );
+}
+
+if(strcmp(node->op, "<") == 0)
+{
+    return comparison_less(
+        visitor,
+        left,
+        right
+    );
+}
+
+
+
 printf("Unknown operator: %s\n", node->op);
 exit(1);
 
@@ -290,4 +332,12 @@ AST_T* visitor_visit_unary(
 
     printf("Unknown unary operator\n");
     exit(1);
+}
+
+AST_T* visitor_visit_bool(
+    visitor_T* visitor,
+    AST_T* node
+)
+{
+    return node;
 }

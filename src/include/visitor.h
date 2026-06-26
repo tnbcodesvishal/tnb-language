@@ -30,6 +30,8 @@ AST_T* visitor_visit_char(visitor_T* visitor,AST_T* node);
 AST_T* visitor_visit_binop( visitor_T* visitor,AST_T* node);
 AST_T* visitor_visit_unary( visitor_T* visitor,AST_T* node);
 
+AST_T* visitor_visit_bool( visitor_T* visitor,AST_T* node);
+
 
 
 
