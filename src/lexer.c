@@ -120,6 +120,33 @@ if(
     );
 }
 
+if(
+    lexer->c== '>' &&
+    lexer->contents[lexer->i+1]=='='
+){
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+
+    return init_token(
+        TOKEN_GREATER_EQUAL,
+         strdup(">=")
+    );
+}
+
+if(
+    lexer->c=='<' &&
+    lexer->contents[lexer->i+1]=='='
+
+){
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return init_token(
+        TOKEN_LESS_EQUAL,
+         strdup("<=")
+
+    );
+}
+
         switch (lexer->c)
         {
             case '=':

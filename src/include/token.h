@@ -25,6 +25,8 @@ TOKEN_EQUAL_EQUAL,  // ==
 TOKEN_NOT_EQUAL,    // !=
 TOKEN_GREATER,     //>
 TOKEN_LESS,        //<
+TOKEN_GREATER_EQUAL,   // >=
+TOKEN_LESS_EQUAL,      //<=
 
     TOKEN_EOF
 } type;

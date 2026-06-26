@@ -28,4 +28,16 @@ AST_T* comparison_less(
     AST_T* left,
     AST_T* right
 );
+
+AST_T* comparison_greater_equal(
+    visitor_T* visitor,
+    AST_T* left,
+    AST_T* right
+);
+
+AST_T* comparison_less_equal(
+    visitor_T* visitor,
+    AST_T* left,
+     AST_T* right
+);
 #endif

@@ -1,33 +1,141 @@
-@ this is single line comment 
+@ ==========================================
+@ TNB Language Demo Program
+@ ==========================================
 
-@@ this is 
-multiple lines
-comments@@
+print("==================================");
+print("        TNB LANGUAGE DEMO         ");
+print("==================================");
 
-var name="vishal singh";
-var age=22;
-var a=10;
-var b=5;
-var c=a+b;
-var decvalue=22.1;
-var charvalue='A';
+@ Integer variables
+var a = 20;
+var b = 10;
+var c = 5;
 
-@print(a+b,a-b,a*b,a/b);
-@print(10+2,10-3,10*2,10/2);
+print("----- Integer Values -----");
+print(a);
+print(b);
+print(c);
 
-print(10+5*2);     
-print(20+5/2);      
-print(20-5-2);     
-print(2*3+4*5);     
-print(100/10+5);    
-print((10+5)*2);
+@ Float variables
+var pi = 3.14;
+var price = 99.99;
 
+print("----- Float Values -----");
+print(pi);
+print(price);
 
+@ Character
+var grade = 'A';
 
+print("----- Character -----");
+print(grade);
 
+@ String
+var name = "Vishal Singh";
 
+print("----- String -----");
+print(name);
 
+print("==================================");
+print("Arithmetic Operations");
+print("==================================");
 
+print(a+b);
+print(a-b);
+print(a*b);
+print(a/b);
+print(a%c);
 
+print((a+b)*c);
+print(a+(b*c));
+print((a-b)+(c*2));
 
+print("==================================");
+print("Unary Operators");
+print("==================================");
 
+print(-a);
+print(+a);
+
+print(-(a+b));
+print(+(a+b));
+
+print("==================================");
+print("Mixed Arithmetic");
+print("==================================");
+
+print(5+2.5);
+print(5.5+2);
+print(10*2.5);
+print(20/4.0);
+
+print("==================================");
+print("Comparison Operators");
+print("==================================");
+
+print(a==20);
+print(a==b);
+
+print(a!=b);
+print(a!=20);
+
+print(a>b);
+print(a<b);
+
+print(a>=20);
+print(a>=25);
+
+print(b<=10);
+print(b<=5);
+
+print("==================================");
+print("Complex Expressions");
+print("==================================");
+
+print((10+5)==15);
+print((10*2)==20);
+print((20/2)==10);
+print((10%3)==1);
+
+print((5+5)>8);
+print((5+5)<8);
+
+print((10*5)>=50);
+print((10*5)<=50);
+
+print((10+5)!=20);
+
+print("==================================");
+print("Nested Expressions");
+print("==================================");
+
+print(((10+5)*2)==30);
+print(((20-5)*2)==30);
+print(((5*4)+(10/2))==25);
+
+print(((100/5)-5)>=10);
+print(((100/5)-5)<=10);
+
+print("==================================");
+print("Variables Inside Expressions");
+print("==================================");
+
+print(a+b);
+print(a-b);
+print(a*c);
+print(a/c);
+
+print((a+b)==30);
+print((a-b)==10);
+print((a*c)==100);
+print((a/c)==4);
+
+print((a+b)>25);
+print((a+b)<25);
+
+print((a*b)>=200);
+print((a*b)<=100);
+
+print("==================================");
+print("End Of Demo");
+print("==================================");

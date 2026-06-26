@@ -84,7 +84,9 @@ AST_T* parser_parse_expr(parser_T* parser)
         parser->current_token->type == TOKEN_EQUAL_EQUAL||
         parser->current_token->type == TOKEN_NOT_EQUAL||
         parser->current_token->type == TOKEN_GREATER||
-        parser->current_token->type == TOKEN_LESS
+        parser->current_token->type == TOKEN_LESS||
+        parser->current_token->type == TOKEN_GREATER_EQUAL||
+        parser->current_token->type == TOKEN_LESS_EQUAL
     )
     {
         char* op = parser->current_token->value;
@@ -104,9 +106,13 @@ AST_T* parser_parse_expr(parser_T* parser)
         else if(parser->current_token->type == TOKEN_GREATER)
             parser_eat(parser, TOKEN_GREATER);
 
-
-        else
+        else if(parser->current_token->type == TOKEN_LESS)
             parser_eat(parser, TOKEN_LESS);
+
+        else if(parser->current_token->type == TOKEN_GREATER_EQUAL)
+            parser_eat(parser, TOKEN_GREATER_EQUAL);
+        else
+            parser_eat(parser, TOKEN_LESS_EQUAL);
 
         AST_T* right = parser_parse_term(parser);
 

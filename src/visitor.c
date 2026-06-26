@@ -282,6 +282,23 @@ if(strcmp(node->op, "<") == 0)
     );
 }
 
+if(strcmp(node->op, ">=") == 0)
+{
+    return comparison_greater_equal(
+        visitor,
+        left,
+        right
+    );
+}
+
+if(strcmp(node->op, "<=") == 0)
+{
+    return comparison_less_equal(
+        visitor,
+        left,
+        right
+    );
+}
 
 
 printf("Unknown operator: %s\n", node->op);
