@@ -147,6 +147,20 @@ if(
     );
 }
 
+if(
+    lexer->c == '&' &&
+    lexer->contents[lexer->i + 1] == '&'
+)
+{
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+
+    return init_token(
+        TOKEN_AND,
+        strdup("&&")
+    );
+}
+
         switch (lexer->c)
         {
             case '=':
@@ -298,8 +312,10 @@ token_T *lexer_collect_id(lexer_T *lexer)
     char *value = calloc(1, sizeof(char));
     value[0] = '\0';
 
-    while (lexer->c != '\0' &&
-           (isalnum((unsigned char)lexer->c) || lexer->c == '_'))
+    while (
+        lexer->c != '\0' &&
+        (isalnum((unsigned char)lexer->c) || lexer->c == '_')
+    )
     {
         char *s = lexer_get_current_char_as_string(lexer);
 
@@ -314,6 +330,20 @@ token_T *lexer_collect_id(lexer_T *lexer)
 
         free(s);
     }
+
+    /* Keywords */
+
+    if(strcmp(value, "true") == 0)
+    {
+        return init_token(TOKEN_TRUE, value);
+    }
+
+    if(strcmp(value, "false") == 0)
+    {
+        return init_token(TOKEN_FALSE, value);
+    }
+
+    /* Identifier */
 
     return init_token(TOKEN_ID, value);
 }

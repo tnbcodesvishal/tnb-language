@@ -1,0 +1,25 @@
+print(true && true);
+
+print(true && false);
+
+print(false && true);
+
+print(false && false);
+
+print("------------------------------");
+
+var a = true;
+var b = false;
+
+print(a && a);
+print(a && b);
+print(b && a);
+print(b && b);
+
+print("----------------------");
+
+print((10>5) && (20>10));
+
+print((10>5) && (20<10));
+
+print((10<5) && (20>10));

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "operators/operators.h"
 #include "comparisons/comparisons.h"
+#include "logical/logical.h"
 
 #include "builtins/builtins.h"
 
@@ -294,6 +295,15 @@ if(strcmp(node->op, ">=") == 0)
 if(strcmp(node->op, "<=") == 0)
 {
     return comparison_less_equal(
+        visitor,
+        left,
+        right
+    );
+}
+
+if(strcmp(node->op,"&&")==0)
+{
+    return logical_and(
         visitor,
         left,
         right

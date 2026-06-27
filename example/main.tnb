@@ -136,6 +136,54 @@ print((a+b)<25);
 print((a*b)>=200);
 print((a*b)<=100);
 
+
+print("==================================");
+print("boolean variables");
+print("==================================");
+
+var isStudent = true;
+var isAdmin = false;
+
+print(isStudent);
+print(isAdmin);
+
+print(true);
+print(false);
+
+print(10 == 10);
+print(10 != 10);
+
+print("==================================");
+print("logical AND");
+print("==================================");
+
+print(true && true);
+
+print(true && false);
+
+print(false && true);
+
+print(false && false);
+
+
+var e = true;
+var d = false;
+
+print(e && e);
+print(e && d);
+print(d && e);
+print(d && d);
+
+
+print((10>5) && (20>10));
+
+print((10>5) && (20<10));
+
+print((10<5) && (20>10));
+
+
+
+
 print("==================================");
 print("End Of Demo");
 print("==================================");
