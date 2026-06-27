@@ -87,7 +87,8 @@ AST_T* parser_parse_expr(parser_T* parser)
         parser->current_token->type == TOKEN_LESS||
         parser->current_token->type == TOKEN_GREATER_EQUAL||
         parser->current_token->type == TOKEN_LESS_EQUAL||
-        parser->current_token->type == TOKEN_AND
+        parser->current_token->type == TOKEN_AND||
+        parser->current_token->type == TOKEN_OR
     )
     {
         char* op = parser->current_token->value;
@@ -116,8 +117,11 @@ AST_T* parser_parse_expr(parser_T* parser)
         else if(parser->current_token->type == TOKEN_LESS_EQUAL)
             parser_eat(parser, TOKEN_LESS_EQUAL);
 
+        else if(parser->current_token->type == TOKEN_AND)
+            parser_eat(parser, TOKEN_AND);           
+
         else
-            parser_eat(parser, TOKEN_AND);
+            parser_eat(parser, TOKEN_OR);
 
 
 
@@ -161,6 +165,20 @@ AST_T* parser_parse_factor(parser_T* parser)
         return unary;
     }
 
+    /* Logical NOT */
+
+    if(parser->current_token->type == TOKEN_NOT)
+    {
+        parser_eat(parser, TOKEN_NOT);
+
+        AST_T* unary = init_ast(AST_UNARY);
+
+        unary->unary_op = "!";
+        unary->unary_value = parser_parse_factor(parser);
+
+        return unary;
+    }
+
     if(parser->current_token->type == TOKEN_LPAREN)
     {
         parser_eat(parser, TOKEN_LPAREN);
@@ -174,24 +192,24 @@ AST_T* parser_parse_factor(parser_T* parser)
 
     switch(parser->current_token->type)
     {
-    case TOKEN_STRING:
-        return parser_parse_string(parser);
+        case TOKEN_STRING:
+            return parser_parse_string(parser);
 
-    case TOKEN_INT:
-        return parser_parse_int(parser);
+        case TOKEN_INT:
+            return parser_parse_int(parser);
 
-    case TOKEN_FLOAT:
-        return parser_parse_float(parser);
+        case TOKEN_FLOAT:
+            return parser_parse_float(parser);
 
-    case TOKEN_CHAR:
-        return parser_parse_char(parser);
+        case TOKEN_CHAR:
+            return parser_parse_char(parser);
 
-    case TOKEN_TRUE:
-    case TOKEN_FALSE:
-        return parser_parse_bool(parser);
+        case TOKEN_TRUE:
+        case TOKEN_FALSE:
+            return parser_parse_bool(parser);
 
-    case TOKEN_ID:
-        return parser_parse_id(parser);
+        case TOKEN_ID:
+            return parser_parse_id(parser);
     }
 
     return init_ast(AST_NOOP);

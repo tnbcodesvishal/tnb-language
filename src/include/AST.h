@@ -24,7 +24,10 @@ typedef struct AST_STRUCT
     
     } type;
 
+
+    
     char* variable_defination_variable_name;
+
     struct AST_STRUCT* variable_defination_value;
     
 

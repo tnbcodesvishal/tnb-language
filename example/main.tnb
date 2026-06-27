@@ -183,6 +183,46 @@ print((10<5) && (20>10));
 
 
 
+print("==================================");
+print("logical OR");
+print("==================================");
+
+print(true || true);
+
+print(true || false);
+
+print(false || true);
+
+print(false || false);
+
+
+print(e || e);
+print(e || d);
+print(d || e);
+print(d || d);
+
+
+print((10>5) || (20>10));
+print((10>5) || (20<10));
+print((10<5) || (20>10));
+
+
+print("==================================");
+print("logical NOT");
+print("==================================");
+
+print(!true);
+print(!false);
+
+
+print(!e);
+print(!d);
+
+
+
+print(!(10 > 5));
+print(!(10 < 5));
+
 
 print("==================================");
 print("End Of Demo");

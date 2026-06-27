@@ -32,6 +32,8 @@ TOKEN_TRUE,
 TOKEN_FALSE,
 
 TOKEN_AND,     // &&
+TOKEN_OR,      // ||
+TOKEN_NOT,       //!
 
     TOKEN_EOF
 } type;

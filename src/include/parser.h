@@ -35,10 +35,8 @@ AST_T* parser_parse_char(parser_T* parser);
 
 AST_T* parser_parse_id(parser_T* parser);
 
-AST_T* parser_parse_bool(parser_T* parser);
 
-
- 
+ AST_T* parser_parse_bool(parser_T* parser);
 
 
 #endif

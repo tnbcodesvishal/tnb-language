@@ -67,6 +67,8 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node){
         return visitor_visit_bool(visitor, node);
         break;
 
+        
+
             case AST_NOOP:
                 return node;
                 break;
@@ -310,6 +312,15 @@ if(strcmp(node->op,"&&")==0)
     );
 }
 
+if(strcmp(node->op, "||") == 0)
+{
+    return logical_or(
+        visitor,
+        left,
+        right
+    );
+}
+
 
 printf("Unknown operator: %s\n", node->op);
 exit(1);
@@ -327,17 +338,16 @@ AST_T* visitor_visit_unary(
             node->unary_value
         );
 
-    if(strcmp(node->unary_op,"+")==0)
+    if(strcmp(node->unary_op, "+") == 0)
     {
         return value;
     }
 
-    if(strcmp(node->unary_op,"-")==0)
+    if(strcmp(node->unary_op, "-") == 0)
     {
         if(value->type == AST_INT)
         {
-            AST_T* result =
-                init_ast(AST_INT);
+            AST_T* result = init_ast(AST_INT);
 
             result->int_value =
                 -value->int_value;
@@ -347,8 +357,7 @@ AST_T* visitor_visit_unary(
 
         if(value->type == AST_FLOAT)
         {
-            AST_T* result =
-                init_ast(AST_FLOAT);
+            AST_T* result = init_ast(AST_FLOAT);
 
             result->float_value =
                 -value->float_value;
@@ -357,7 +366,17 @@ AST_T* visitor_visit_unary(
         }
     }
 
-    printf("Unknown unary operator\n");
+    /* Logical NOT */
+
+    if(strcmp(node->unary_op, "!") == 0)
+    {
+        return logical_not(
+            visitor,
+            value
+        );
+    }
+
+    printf("Unknown unary operator: %s\n", node->unary_op);
     exit(1);
 }
 

@@ -10,4 +10,15 @@ AST_T* logical_and(
     AST_T* right
 );
 
+AST_T* logical_or(
+    visitor_T* visitor,
+    AST_T* left,
+    AST_T* right
+);
+
+AST_T* logical_not(
+    visitor_T* visitor,
+    AST_T* value
+);
+
 #endif

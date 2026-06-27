@@ -120,6 +120,16 @@ if(
     );
 }
 
+if(lexer->c == '!')
+{
+    lexer_advance(lexer);
+
+    return init_token(
+        TOKEN_NOT,
+        strdup("!")
+    );
+}
+
 if(
     lexer->c== '>' &&
     lexer->contents[lexer->i+1]=='='
@@ -160,6 +170,22 @@ if(
         strdup("&&")
     );
 }
+
+if(
+    lexer->c == '|' &&
+    lexer->contents[lexer->i + 1] == '|'
+)
+{
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+
+    return init_token(
+        TOKEN_OR,
+        strdup("||")
+    );
+}
+
+
 
         switch (lexer->c)
         {
