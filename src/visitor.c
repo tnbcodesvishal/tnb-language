@@ -32,6 +32,10 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node){
                 return visitor_visit_variable(visitor, node);
                 break;
 
+            case AST_VARIABLE_ASSIGNMENT:
+                 return visitor_visit_variable_assignment(visitor, node);
+                 break;
+
             case AST_FUNCTION_CALL:
                 return visitor_visit_function_call(visitor, node);
                 break;
@@ -206,6 +210,9 @@ visitor_visit(visitor, node->left);
 AST_T* right =
     visitor_visit(visitor, node->right);
 
+// printf("BINOP OPERATOR = '%s'\n", node->op);
+    
+
 if(strcmp(node->op, "+") == 0)
 {
     return operator_plus(
@@ -259,7 +266,10 @@ if(strcmp(node->op,"==")==0)
     );
 }
 
-if(strcmp(node->op,"!=")==0){
+if(strcmp(node->op, "!=") == 0)
+{
+    // printf("NOT_EQUAL BRANCH\n");
+
     return comparison_not_equal(
         visitor,
         left,
@@ -269,13 +279,14 @@ if(strcmp(node->op,"!=")==0){
 
 if(strcmp(node->op, ">") == 0)
 {
+    // printf("GREATER BRANCH\n");
+
     return comparison_greater(
         visitor,
         left,
         right
     );
 }
-
 if(strcmp(node->op, "<") == 0)
 {
     return comparison_less(
@@ -386,4 +397,38 @@ AST_T* visitor_visit_bool(
 )
 {
     return node;
+}
+
+
+AST_T* visitor_visit_variable_assignment(
+    visitor_T* visitor,
+    AST_T* node
+)
+{
+    for(int i = 0; i < visitor->variables_definations_size; i++)
+    {
+        AST_T* vardef =
+            visitor->variables_definations[i];
+
+        if(strcmp(
+            vardef->variable_defination_variable_name,
+            node->variable_assignment_variable_name
+        ) == 0)
+        {
+            vardef->variable_defination_value =
+                visitor_visit(
+                    visitor,
+                    node->variable_assignment_value
+                );
+
+            return vardef;
+        }
+    }
+
+    printf(
+        "Undefined variable: %s\n",
+        node->variable_assignment_variable_name
+    );
+
+    exit(1);
 }

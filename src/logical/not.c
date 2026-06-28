@@ -7,7 +7,8 @@ AST_T* logical_not(
 {
     AST_T* result = init_ast(AST_BOOL);
 
-    result->bool_value = !value->bool_value;
+    result->bool_value =
+        !logical_get_bool(value);
 
     return result;
 }

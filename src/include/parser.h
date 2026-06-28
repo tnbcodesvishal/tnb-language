@@ -5,9 +5,11 @@
 
 typedef struct PARSER_STRUCT
 {
-    lexer_T* lexer;
-    token_T* current_token;
+     lexer_T* lexer;
+
     token_T* prev_token;
+    token_T* current_token;
+    token_T* next_token;
 }parser_T;
 
 parser_T* init_parser(lexer_T* lexer);
@@ -37,6 +39,18 @@ AST_T* parser_parse_id(parser_T* parser);
 
 
  AST_T* parser_parse_bool(parser_T* parser);
+
+ AST_T* parser_parse_variable_assignment(parser_T* parser);
+
+ AST_T* parser_parse_logical(parser_T* parser);
+
+
+ AST_T* parser_parse_comparison(parser_T* parser);
+
+AST_T* parser_parse_additive(parser_T* parser);
+
+
+
 
 
 #endif

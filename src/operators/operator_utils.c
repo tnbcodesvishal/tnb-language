@@ -11,9 +11,10 @@ double operator_get_number(AST_T* node)
 
         case AST_FLOAT:
             return node->float_value;
-    }
 
-    return 0;
+        default:
+            return 0;
+    }
 }
 
 int operator_result_is_float(
@@ -32,16 +33,14 @@ AST_T* operator_create_number(
 {
     if(is_float)
     {
-        AST_T* ast =
-            init_ast(AST_FLOAT);
+        AST_T* ast = init_ast(AST_FLOAT);
 
         ast->float_value = value;
 
         return ast;
     }
 
-    AST_T* ast =
-        init_ast(AST_INT);
+    AST_T* ast = init_ast(AST_INT);
 
     ast->int_value = (int)value;
 

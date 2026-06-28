@@ -8,6 +8,12 @@ AST_T* operator_modulo(
     AST_T* right
 )
 {
+    // printf("LEFT TYPE  = %d\n", left->type);
+    // printf("RIGHT TYPE = %d\n", right->type);
+
+    // printf("LEFT VALUE  = %d\n", left->int_value);
+    // printf("RIGHT VALUE = %d\n", right->int_value);
+
     if(left->type != AST_INT ||
        right->type != AST_INT)
     {

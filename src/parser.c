@@ -3,131 +3,237 @@
     #include <stdlib.h>
     #include<string.h>
 
-    parser_T* init_parser(lexer_T* lexer){
-        parser_T* parser= calloc(1, sizeof(struct PARSER_STRUCT));
-        parser->lexer=lexer;
-        parser->current_token=lexer_get_next_token(lexer);
-        parser->prev_token=parser->current_token; 
+    // parser_T* init_parser(lexer_T* lexer){
+    //     parser_T* parser= calloc(1, sizeof(struct PARSER_STRUCT));
+    //     parser->lexer=lexer;
+    //     parser->current_token=lexer_get_next_token(lexer);
+    //     parser->prev_token=parser->current_token; 
 
-        return parser;
+    //     return parser;
+    // }
+
+    parser_T* init_parser(lexer_T* lexer)
+{
+    parser_T* parser =
+        calloc(1, sizeof(struct PARSER_STRUCT));
+
+    parser->lexer = lexer;
+
+    parser->prev_token = NULL;
+
+    parser->current_token =
+        lexer_get_next_token(lexer);
+
+    parser->next_token =
+        lexer_get_next_token(lexer);
+
+    return parser;
+}
+
+    // void parser_eat(parser_T* parser, int token_type){
+
+    //     if(parser->current_token->type == token_type){
+
+    //         parser->prev_token = parser->current_token; 
+    //         parser->current_token = lexer_get_next_token(parser->lexer);
+
+
+    //     }else{
+    //         printf("Syntax error: expected token type `%s`, got %d", 
+    //         parser->current_token->value,
+    //         parser->current_token->type
+
+    // );
+
+    //         exit(1);
+    //     }
+    // }
+
+//     void parser_eat(
+//     parser_T* parser,
+//     int token_type
+// )
+// {
+//     if(parser->current_token->type == token_type)
+//     {
+//         parser->prev_token =
+//             parser->current_token;
+
+//         parser->current_token =
+//             parser->next_token;
+
+//         parser->next_token =
+//             lexer_get_next_token(parser->lexer);
+
+//         return;
+//     }
+
+//     printf(
+//         "Syntax error: expected token type %d, got %d\n",
+//         token_type,
+//         parser->current_token->type
+//     );
+
+//     exit(1);
+// }
+
+void parser_eat(parser_T* parser, int token_type)
+{
+    if(parser->current_token->type == token_type)
+    {
+        parser->prev_token = parser->current_token;
+
+        parser->current_token = parser->next_token;
+
+        parser->next_token =
+            lexer_get_next_token(parser->lexer);
+
+        return;
     }
 
-    void parser_eat(parser_T* parser, int token_type){
-
-        if(parser->current_token->type == token_type){
-
-            parser->prev_token = parser->current_token; 
-            parser->current_token = lexer_get_next_token(parser->lexer);
-
-
-        }else{
-            printf("Syntax error: expected token type `%s`, got %d", 
-            parser->current_token->value,
-            parser->current_token->type
-
+    printf(
+        "Syntax Error: Expected token %d, got %d (%s)\n",
+        token_type,
+        parser->current_token->type,
+        parser->current_token->value
     );
 
-            exit(1);
-        }
-    }
-
+    exit(1);
+}
     AST_T* parser_parse(parser_T* parser){
 
         return parser_parse_statements(parser);
 
     }
-    AST_T* parser_parse_statement(parser_T* parser){
+AST_T* parser_parse_statement(parser_T* parser)
+{
+    if(parser->current_token->type == TOKEN_EOF)
+        return NULL;
 
-        switch(parser->current_token->type){
-            case TOKEN_ID:
-                return parser_parse_id(parser);
-        }
-
-        return init_ast(AST_NOOP);
+    switch(parser->current_token->type)
+    {
+        case TOKEN_ID:
+            return parser_parse_id(parser);
     }
-    AST_T* parser_parse_statements(parser_T* parser){
-        AST_T* compound=init_ast(AST_COMPOUND);
 
-        compound->compound_value=calloc(1, sizeof(struct AST_STRUCT*));
-        AST_T* ast_statement=parser_parse_statement(parser);
-        compound->compound_value[0]=ast_statement;
-        compound->compound_size+=1;
+    return init_ast(AST_NOOP);
+}
+AST_T* parser_parse_statements(parser_T* parser)
+{
+    AST_T* compound = init_ast(AST_COMPOUND);
 
-    
+    compound->compound_value = NULL;
+    compound->compound_size = 0;
 
+    while(parser->current_token->type != TOKEN_EOF)
+    {
+        AST_T* stmt = parser_parse_statement(parser);
 
-        while(parser->current_token->type ==TOKEN_SEMI){
-        parser_eat(parser, TOKEN_SEMI);
+        compound->compound_size++;
 
-        AST_T* ast_statement=parser_parse_statement(parser);
+        compound->compound_value = realloc(
+            compound->compound_value,
+            compound->compound_size * sizeof(AST_T*)
+        );
 
-        if(ast_statement){
+        compound->compound_value[
+            compound->compound_size - 1
+        ] = stmt;
 
-        
-            compound->compound_size+=1;
-        compound->compound_value=realloc(compound->compound_value, compound->compound_size*sizeof(struct AST_STRUCT*));
-        compound->compound_value[compound->compound_size-1]=ast_statement;
-
-        }
+        if(parser->current_token->type == TOKEN_SEMI)
+            parser_eat(parser, TOKEN_SEMI);
+        else
+            break;
     }
+
     return compound;
-    }
+}
 
 
 AST_T* parser_parse_expr(parser_T* parser)
 {
-    AST_T* left = parser_parse_term(parser);
+    return parser_parse_logical(parser);
+}
+
+AST_T* parser_parse_logical(parser_T* parser)
+{
+    AST_T* left = parser_parse_comparison(parser);
 
     while(
-        parser->current_token->type == TOKEN_PLUS ||
-        parser->current_token->type == TOKEN_MINUS||
-        parser->current_token->type == TOKEN_EQUAL_EQUAL||
-        parser->current_token->type == TOKEN_NOT_EQUAL||
-        parser->current_token->type == TOKEN_GREATER||
-        parser->current_token->type == TOKEN_LESS||
-        parser->current_token->type == TOKEN_GREATER_EQUAL||
-        parser->current_token->type == TOKEN_LESS_EQUAL||
-        parser->current_token->type == TOKEN_AND||
+        parser->current_token->type == TOKEN_AND ||
         parser->current_token->type == TOKEN_OR
     )
     {
-        char* op = parser->current_token->value;
+        char* op = strdup(parser->current_token->value);
 
-        if(parser->current_token->type == TOKEN_PLUS)
-            parser_eat(parser, TOKEN_PLUS);
-
-        else if(parser->current_token->type == TOKEN_MINUS)
-            parser_eat(parser, TOKEN_MINUS);
-
-        else if(parser->current_token->type == TOKEN_EQUAL_EQUAL)
-            parser_eat(parser, TOKEN_EQUAL_EQUAL);
-
-        else if(parser->current_token->type == TOKEN_NOT_EQUAL)
-            parser_eat(parser, TOKEN_NOT_EQUAL);
-
-        else if(parser->current_token->type == TOKEN_GREATER)
-            parser_eat(parser, TOKEN_GREATER);
-
-        else if(parser->current_token->type == TOKEN_LESS)
-            parser_eat(parser, TOKEN_LESS);
-
-        else if(parser->current_token->type == TOKEN_GREATER_EQUAL)
-            parser_eat(parser, TOKEN_GREATER_EQUAL);
-
-        else if(parser->current_token->type == TOKEN_LESS_EQUAL)
-            parser_eat(parser, TOKEN_LESS_EQUAL);
-
-        else if(parser->current_token->type == TOKEN_AND)
-            parser_eat(parser, TOKEN_AND);           
-
+        if(parser->current_token->type == TOKEN_AND)
+            parser_eat(parser, TOKEN_AND);
         else
             parser_eat(parser, TOKEN_OR);
 
+        AST_T* right =
+            parser_parse_comparison(parser);
 
+        AST_T* binop =
+            init_ast(AST_BINOP);
 
-        AST_T* right = parser_parse_term(parser);
+        binop->left = left;
+        binop->right = right;
+        binop->op = op;
 
-        AST_T* binop = init_ast(AST_BINOP);
+        left = binop;
+    }
+
+    return left;
+}
+
+AST_T* parser_parse_comparison(parser_T* parser)
+{
+    AST_T* left = parser_parse_additive(parser);
+
+    while(
+        parser->current_token->type == TOKEN_EQUAL_EQUAL ||
+        parser->current_token->type == TOKEN_NOT_EQUAL ||
+        parser->current_token->type == TOKEN_GREATER ||
+        parser->current_token->type == TOKEN_LESS ||
+        parser->current_token->type == TOKEN_GREATER_EQUAL ||
+        parser->current_token->type == TOKEN_LESS_EQUAL
+    )
+    {
+        char* op = strdup(parser->current_token->value);
+
+        switch(parser->current_token->type)
+        {
+            case TOKEN_EQUAL_EQUAL:
+                parser_eat(parser, TOKEN_EQUAL_EQUAL);
+                break;
+
+            case TOKEN_NOT_EQUAL:
+                parser_eat(parser, TOKEN_NOT_EQUAL);
+                break;
+
+            case TOKEN_GREATER:
+                parser_eat(parser, TOKEN_GREATER);
+                break;
+
+            case TOKEN_LESS:
+                parser_eat(parser, TOKEN_LESS);
+                break;
+
+            case TOKEN_GREATER_EQUAL:
+                parser_eat(parser, TOKEN_GREATER_EQUAL);
+                break;
+
+            case TOKEN_LESS_EQUAL:
+                parser_eat(parser, TOKEN_LESS_EQUAL);
+                break;
+        }
+
+        AST_T* right =
+            parser_parse_additive(parser);
+
+        AST_T* binop =
+            init_ast(AST_BINOP);
 
         binop->left = left;
         binop->right = right;
@@ -218,7 +324,7 @@ AST_T* parser_parse_factor(parser_T* parser)
 
    AST_T* parser_parse_term(parser_T* parser)
 {
-    AST_T* left = parser_parse_factor(parser);
+  AST_T* left = parser_parse_factor(parser);
 
     while(
         parser->current_token->type == TOKEN_MUL ||
@@ -226,7 +332,7 @@ AST_T* parser_parse_factor(parser_T* parser)
         parser->current_token->type == TOKEN_MOD
     )
     {
-        char* op = parser->current_token->value;
+        char* op = strdup(parser->current_token->value);
 
         if(parser->current_token->type == TOKEN_MUL)
             parser_eat(parser, TOKEN_MUL);
@@ -248,38 +354,85 @@ AST_T* parser_parse_factor(parser_T* parser)
 
     return left;
 }
-        
-    AST_T* parser_parse_function_call(parser_T* parser){
 
-    AST_T* function_call=init_ast(AST_FUNCTION_CALL); 
+AST_T* parser_parse_additive(parser_T* parser)
+{
+    AST_T* left = parser_parse_term(parser);
 
-    function_call->function_call_name=parser->prev_token->value;
-        parser_eat(parser, TOKEN_LPAREN); // eat function name
+    while(
+        parser->current_token->type == TOKEN_PLUS ||
+        parser->current_token->type == TOKEN_MINUS
+    )
+    {
+        char* op = strdup(parser->current_token->value);
 
-        function_call->function_call_arguments=calloc(1, sizeof(struct AST_STRUCT*));
-        AST_T* ast_expr=parser_parse_expr(parser);
-        function_call->function_call_arguments[0]=ast_expr;
-        function_call->function_call_arguments_size+=1;
+        if(parser->current_token->type == TOKEN_PLUS)
+            parser_eat(parser, TOKEN_PLUS);
+        else
+            parser_eat(parser, TOKEN_MINUS);
 
-    
+        AST_T* right = parser_parse_term(parser);
 
+        AST_T* binop = init_ast(AST_BINOP);
 
-        while(parser->current_token->type ==TOKEN_COMMA){
-        parser_eat(parser, TOKEN_COMMA);
+        binop->left = left;
+        binop->right = right;
+        binop->op = op;
 
-            AST_T* ast_expr=parser_parse_expr(parser);
-
-            function_call->function_call_arguments_size+=1;
-        function_call->function_call_arguments=realloc(function_call->function_call_arguments, function_call->function_call_arguments_size*sizeof(struct AST_STRUCT*));
-        function_call->function_call_arguments[function_call->function_call_arguments_size-1]=ast_expr;
-
-        }
-        
-        parser_eat(parser, TOKEN_RPAREN); // eat )
-        return function_call;
-
-
+        left = binop;
     }
+
+    return left;
+}
+        
+AST_T* parser_parse_function_call(parser_T* parser)
+{
+    AST_T* function_call =
+        init_ast(AST_FUNCTION_CALL);
+
+    function_call->function_call_name =
+        strdup(parser->current_token->value);
+
+    parser_eat(parser, TOKEN_ID);
+    parser_eat(parser, TOKEN_LPAREN);
+
+    function_call->function_call_arguments =
+        calloc(1, sizeof(AST_T*));
+
+    function_call->function_call_arguments_size = 0;
+
+    if(parser->current_token->type != TOKEN_RPAREN)
+    {
+        AST_T* ast_expr =
+            parser_parse_expr(parser);
+
+        function_call->function_call_arguments[
+            function_call->function_call_arguments_size++
+        ] = ast_expr;
+
+        while(parser->current_token->type == TOKEN_COMMA)
+        {
+            parser_eat(parser, TOKEN_COMMA);
+
+            ast_expr = parser_parse_expr(parser);
+
+            function_call->function_call_arguments =
+                realloc(
+                    function_call->function_call_arguments,
+                    sizeof(AST_T*) *
+                    (function_call->function_call_arguments_size + 1)
+                );
+
+            function_call->function_call_arguments[
+                function_call->function_call_arguments_size++
+            ] = ast_expr;
+        }
+    }
+
+    parser_eat(parser, TOKEN_RPAREN);
+
+    return function_call;
+}
 
     // AST_T* parser_parse_variable_defination(parser_T* parser){
 
@@ -301,13 +454,12 @@ AST_T* parser_parse_factor(parser_T* parser)
     //     return variable_defination;
     // }
 
-
-    AST_T* parser_parse_variable_defination(parser_T* parser)
+AST_T* parser_parse_variable_defination(parser_T* parser)
 {
     parser_eat(parser, TOKEN_ID); // eat var
 
     char* variable_defination_variable_name =
-        parser->current_token->value;
+        strdup(parser->current_token->value);
 
     parser_eat(parser, TOKEN_ID); // eat variable name
 
@@ -333,20 +485,25 @@ AST_T* parser_parse_factor(parser_T* parser)
     return variable_defination;
 }
     
-    AST_T* parser_parse_variable(parser_T* parser){
-
-        char* token_value=parser->current_token->value;
-        parser_eat(parser, TOKEN_ID); // eat variable name
-
-        if(parser->current_token->type == TOKEN_LPAREN){
-            return parser_parse_function_call(parser);
-        }
-
-        AST_T* ast_variable=init_ast(AST_VARIABLE);
-        ast_variable->variable_name=token_value;
-
-        return ast_variable;
+AST_T* parser_parse_variable(parser_T* parser)
+{
+    if(
+        parser->next_token != NULL &&
+        parser->next_token->type == TOKEN_LPAREN
+    )
+    {
+        return parser_parse_function_call(parser);
     }
+
+    AST_T* ast_variable = init_ast(AST_VARIABLE);
+
+    ast_variable->variable_name =
+        strdup(parser->current_token->value);
+
+    parser_eat(parser, TOKEN_ID);
+
+    return ast_variable;
+}
     AST_T* parser_parse_string(parser_T* parser){
         AST_T* ast_string=init_ast(AST_STRING);
         ast_string->string_value=parser->current_token->value;
@@ -354,13 +511,37 @@ AST_T* parser_parse_factor(parser_T* parser)
         return ast_string;
     }
 
-    AST_T* parser_parse_id(parser_T* parser){
-        if(strcmp(parser->current_token->value, "var")==0){
-            return parser_parse_variable_defination(parser);    
-            }else{
-                return parser_parse_variable(parser);      
-        }
+    // AST_T* parser_parse_id(parser_T* parser){
+    //     if(strcmp(parser->current_token->value, "var")==0){
+    //         return parser_parse_variable_defination(parser);    
+    //         }else{
+    //             return parser_parse_variable(parser);      
+    //     }
+    // }
+
+    AST_T* parser_parse_id(parser_T* parser)
+{
+    /* Variable declaration */
+
+    if(strcmp(parser->current_token->value, "var") == 0)
+    {
+        return parser_parse_variable_defination(parser);
     }
+
+    /* Variable assignment */
+
+    if(
+        parser->next_token != NULL &&
+        parser->next_token->type == TOKEN_EQUALS
+    )
+    {
+        return parser_parse_variable_assignment(parser);
+    }
+
+    /* Variable / Function */
+
+    return parser_parse_variable(parser);
+}
 
     AST_T* parser_parse_int(parser_T* parser)
     {
@@ -411,6 +592,24 @@ AST_T* parser_parse_factor(parser_T* parser)
         ast->bool_value = 0;
         parser_eat(parser, TOKEN_FALSE);
     }
+
+    return ast;
+}
+
+AST_T* parser_parse_variable_assignment(parser_T* parser)
+{
+    AST_T* ast =
+        init_ast(AST_VARIABLE_ASSIGNMENT);
+
+    ast->variable_assignment_variable_name =
+        strdup(parser->current_token->value);
+
+    parser_eat(parser, TOKEN_ID);
+
+    parser_eat(parser, TOKEN_EQUALS);
+
+    ast->variable_assignment_value =
+        parser_parse_expr(parser);
 
     return ast;
 }
