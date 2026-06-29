@@ -1,6 +1,6 @@
 exce = tnb.out
 
-sources = $(wildcard src/*.c) $(wildcard src/operators/*.c) $(wildcard src/builtins/*.c) $(wildcard src/comparisons/*.c) $(wildcard src/logical/*.c) 
+sources = $(wildcard src/*.c) $(wildcard src/operators/*.c) $(wildcard src/builtins/*.c) $(wildcard src/comparisons/*.c) $(wildcard src/logical/*.c) $(wildcard src/assignments/*.c) 
 objects = $(sources:.c=.o)
 
 flags = -g
