@@ -24,7 +24,7 @@ typedef struct AST_STRUCT
     
     } type;
 
-
+// char* variable_assignment_operator;
     
     char* variable_defination_variable_name;
 
@@ -32,6 +32,8 @@ typedef struct AST_STRUCT
 
     char* variable_assignment_variable_name;
 struct AST_STRUCT* variable_assignment_value;
+
+
     
 
     char* variable_name;

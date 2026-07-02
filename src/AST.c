@@ -14,6 +14,8 @@ AST_T* init_ast(int type){
     ast->function_call_arguments=(void *)0;
     ast->function_call_arguments_size=0;
 
+    // ast->variable_assignment_operator = NULL;
+
     //ast string
     ast->string_value=(void *)0;
 
